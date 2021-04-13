@@ -1,6 +1,14 @@
 import GameplayKit
 import SpriteKit
 
+enum CollisionTypes: UInt32 {
+    case player = 1
+    case house = 2
+    case enemy = 4
+    case shoot = 8
+    case bomb = 16
+}
+
 class GameScene: SKScene {
     var spaceShip: SKSpriteNode!
     private let laserShootSound = SKAction.playSoundFileNamed("lasershoot.wav", waitForCompletion: false)
@@ -140,6 +148,7 @@ extension GameScene {
 
         switch self.enemiesMovementDirection {
         case .left:
+            //Calcular la X mínima del enemic de més a l'esquerra
             let minX = allEnemies.reduce(CGFloat(Int.max)) { min($0, $1.position.x) }
             let nextPosition = minX - self.enemiesHorizontalSpacing
             if nextPosition <= -(self.size.width / 2) {
@@ -165,7 +174,7 @@ extension GameScene {
 
         for enemy in allEnemies {
             let enemyAction = SKAction.run {
-                enemy.run(SKAction.moveBy(x: movementX, y: movementY, duration: 0))
+                enemy.run(SKAction.moveBy(x: movementX, y: movementY, duration: 0.2))
             }
             allMoveActions.append(enemyAction)
         }
